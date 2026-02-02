@@ -9,15 +9,20 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "igniteui-react": "^19.4.0",
+    "igniteui-webcomponents": "^6.5.0",
     "next": "16.1.1",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-datepicker": "^9.1.0",
+    "react-dom": "19.2.3",
+    "react-modal": "^3.16.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-modal": "^3.16.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
