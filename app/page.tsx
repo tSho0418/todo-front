@@ -6,6 +6,7 @@ import ParentTaskList, {
 } from "./components/ParentTaskList";
 import { getAllTasks, updateTask } from "./services/taskService";
 import CreateTaskModal from "./components/CreateTaskModal";
+import DeadlineList from "./components/DeadlineList";
 
 export default function Home() {
   const [tasks, setTasks] = useState<TaskInterface[]>([]);
@@ -61,10 +62,7 @@ export default function Home() {
   return (
     <div>
       <div>Todoリスト</div>
-      <ParentTaskList
-        tasks={tasks}
-        onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void}
-      />
+      <DeadlineList tasks={tasks} onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void} />
       <CreateTaskModal setTasks={setTasks} /> 
     </div>
   );
