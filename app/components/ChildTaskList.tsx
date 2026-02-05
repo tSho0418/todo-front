@@ -19,6 +19,11 @@ const ChildTaskList = ({
     onTaskUpdate(updatedTask);
   };
 
+  // Sort tasks by creation date to ensure a stable order
+  const sortedChildTasks = [...childTasks].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
+
   return (
     <div className="space-y-3">
       { totalCount > 0 &&
@@ -31,7 +36,7 @@ const ChildTaskList = ({
       }
 
       <ul className="space-y-2">
-        {childTasks.map((task) => (
+        {sortedChildTasks.map((task) => (
           <li key={task.id} className="flex items-center justify-between">
             <label className="flex items-center">
               <input
