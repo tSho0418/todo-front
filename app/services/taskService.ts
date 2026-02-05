@@ -8,8 +8,8 @@ export const getAllTasks = async (): Promise<Task[]> => {
   return res.json();
 };
 
-export const getTaskById = async (id: number): Promise<Task[]> => {
-  const res = await fetch(`${API_URL}/tasks/${id}`);
+export const getTaskById = async (id: number): Promise<Task> => {
+  const res = await fetch(`${API_URL}/task/${id}`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 };
@@ -31,5 +31,14 @@ export const createTask = async (task: CreateTask): Promise<Task> => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(task),
+  });
+};
+
+export const deleteTask = async (id: number): Promise<void> => {
+  return await fetch(`${API_URL}/task/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    }
   });
 };

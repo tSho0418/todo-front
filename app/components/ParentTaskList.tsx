@@ -1,5 +1,6 @@
 "use client";
 import { useContext, useState } from "react";
+import Link from "next/link"; // Import Link
 import ChildTaskList from "./ChildTaskList";
 import CreateTaskModal from "./CreateTaskModal";
 import { TaskSetterContext } from "../page";
@@ -21,22 +22,19 @@ export type CreateTask = Omit<Task, "id" | "createdAt" | "updatedAt">;
 
 const ParentTaskList = ({
   tasks,
-  onTaskUpdate,
+  onTaskUpdate: onTaskUpdateProp, // Renamed for clarity
 }: {
   tasks: Task[];
   onTaskUpdate: (task: Task, isParentClick?: boolean) => void;
 }) => {
-  const [parentClicked, setParentClicked] = useState<number | null>(null);
   const [isSubTaskModalOpen, setIsSubTaskModalOpen] = useState(false);
   const [currentParentTaskId, setCurrentParentTaskId] = useState<number | null>(null);
 
   const setTasks = useContext(TaskSetterContext);
-  
-  // const [isOpen, setIsOpen] = useState<boolean>(null); // This state was not used
 
   const handleParentCheck = async (task: Task) => {
     const updatedTask = { ...task, completed: !task.completed };
-    onTaskUpdate(updatedTask, true);
+    onTaskUpdateProp(updatedTask, true);
   };
 
   const childTasks = (parentTask: Task) =>
@@ -61,20 +59,24 @@ const ParentTaskList = ({
           )
           .map((task) => (
             <li key={task.id} className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => handleParentCheck(task)}
-                  className="h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
-                />
-                <span className="ml-3 font-medium text-gray-800">{task.title}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => handleParentCheck(task)}
+                    className="h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+                  />
+                  <Link href={`/task/${task.id}`} className="ml-3 font-medium text-gray-800 hover:text-sky-600">
+                    {task.title}
+                  </Link>
+                </div>
               </div>
               {task && (
                 <div className="pl-8 pt-2">
                   <ChildTaskList
                     childTasks={childTasks(task)}
-                    onTaskUpdate={onTaskUpdate}
+                    onTaskUpdate={onTaskUpdateProp}
                   />
                   <button
                     onClick={() => openSubTaskModal(task.id)}

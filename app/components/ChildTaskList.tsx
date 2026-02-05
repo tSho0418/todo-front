@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import Link from "next/link"; // Import Link
 import { Task as TaskInterface } from "./ParentTaskList";
 import ProgressBar from "./ProgressBar";
 
@@ -31,7 +32,7 @@ const ChildTaskList = ({
 
       <ul className="space-y-2">
         {childTasks.map((task) => (
-          <li key={task.id}>
+          <li key={task.id} className="flex items-center justify-between">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -39,7 +40,9 @@ const ChildTaskList = ({
                 onChange={() => handleCheck(task)}
                 className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
               />
-              <span className="ml-2 text-sm text-gray-700">{task.title}</span>
+              <Link href={`/task/${task.id}`} className="ml-2 text-sm text-gray-700 hover:text-sky-600">
+                {task.title}
+              </Link>
             </label>
           </li>
         ))}
