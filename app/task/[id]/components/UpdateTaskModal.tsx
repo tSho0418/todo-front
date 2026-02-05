@@ -15,10 +15,16 @@ const UpdateTaskModal = ({ taskToUpdate, isOpen, onRequestClose, onTaskUpdate }:
       setTitle(taskToUpdate.title);
       setDescription(taskToUpdate.description || "");
       setPriority(taskToUpdate.priority);
-      // IgrDatePicker might need a specific format, ensure taskToUpdate.deadline is compatible
-      if (datePickerRef.current) {
-        datePickerRef.current.value = taskToUpdate.deadline || "";
-      }
+      // Use setTimeout to ensure the web component is ready to receive the value
+      setTimeout(() => {
+        if (datePickerRef.current) {
+          if (taskToUpdate.deadline) {
+            datePickerRef.current.value = new Date(taskToUpdate.deadline);
+          } else {
+            datePickerRef.current.value = null; // Clear if no deadline
+          }
+        }
+      }, 0);
     }
   }, [taskToUpdate, isOpen]);
 

@@ -33,3 +33,12 @@ export const createTask = async (task: CreateTask): Promise<Task> => {
     body: JSON.stringify(task),
   });
 };
+
+export const deleteTask = async (id: number): Promise<void> => {
+  return await fetch(`${API_URL}/task/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+};

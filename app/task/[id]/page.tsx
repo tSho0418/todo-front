@@ -1,9 +1,11 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import { getTaskById } from "../../services/taskService";
 import { Task } from "../../components/ParentTaskList";
 import UpdateTaskModal from "./components/UpdateTaskModal";
+import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import Link from "next/link";
 
 const TaskDetailPage = ({ params }: { params: { id: string } }) => {
@@ -11,7 +13,9 @@ const TaskDetailPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Corrected state variable name
+  
+  const router = useRouter(); // Get router instance
   const resolvedParams = use(params);
   const taskId = Number(resolvedParams.id);
 
@@ -37,6 +41,11 @@ const TaskDetailPage = ({ params }: { params: { id: string } }) => {
   const handleTaskUpdated = () => {
     fetchTask(); // Refetch the task data after an update
   };
+
+  const handleTaskDeleted = () => {
+    router.push('/'); // Redirect to home page after deletion
+  };
+
 
   if (isLoading) {
     return (
@@ -73,18 +82,26 @@ const TaskDetailPage = ({ params }: { params: { id: string } }) => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex justify-between items-start">
           <h1 className="text-3xl font-bold text-gray-800">{task.title}</h1>
-          <button 
-            onClick={() => setIsUpdateModalOpen(true)}
-            className="px-4 py-2 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
-          >
-            Edit
-          </button>
+          <div className="flex space-x-2">
+            <button 
+              onClick={() => setIsUpdateModalOpen(true)}
+              className="px-4 py-2 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            >
+              編集
+            </button>
+            <button 
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              削除
+            </button>
+          </div>
         </div>
         <p className="text-gray-600 mt-4">{task.description}</p>
         <div className="mt-6 border-t pt-4 space-y-2">
-          <p><strong>Priority:</strong> {task.priority === 1 ? 'Low' : task.priority === 2 ? 'Medium' : 'High'}</p>
-          <p><strong>Deadline:</strong> {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Not set'}</p>
-          <p><strong>Status:</strong> {task.completed ? 'Completed' : 'In Progress'}</p>
+          <p><strong>優先度:</strong> {task.priority === 1 ? '低い' : task.priority === 2 ? '普通' : '高い'}</p>
+          <p><strong>期限:</strong> {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Not set'}</p>
+          <p><strong>ステータス:</strong> {task.completed ? '完了' : '未完了'}</p>
         </div>
       </div>
       <UpdateTaskModal
@@ -92,6 +109,12 @@ const TaskDetailPage = ({ params }: { params: { id: string } }) => {
         isOpen={isUpdateModalOpen}
         onRequestClose={() => setIsUpdateModalOpen(false)}
         onTaskUpdate={handleTaskUpdated}
+      />
+      <DeleteConfirmModal
+        taskId={task.id}
+        isOpen={isDeleteModalOpen}
+        onRequestClose={() => setIsDeleteModalOpen(false)}
+        onTaskDelete={handleTaskDeleted}
       />
     </div>
   );
