@@ -67,7 +67,7 @@ export default function Home() {
       <div className="max-w-4xl mx-auto">
         <TaskSetterContext.Provider value={setTasks}>
           <DeadlineList tasks={tasks} onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void} />
-          <CreateTaskModal />
+          <CreateTaskModal setTasks={setTasks}/>
         </TaskSetterContext.Provider>
       </div>
     </main>
