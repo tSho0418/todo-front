@@ -65,7 +65,6 @@ export default function Home() {
   return (
     <div>
       <TaskSetterContext.Provider value={setTasks}>
-        <div>Todoリスト</div>
         <DeadlineList tasks={tasks} onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void} />
         <CreateTaskModal /> 
       </TaskSetterContext.Provider>
