@@ -9,7 +9,7 @@ export const getAllTasks = async (): Promise<Task[]> => {
 };
 
 export const getTaskById = async (id: number): Promise<Task[]> => {
-  const res = await fetch(`${API_URL}/tasks/${id}`);
+  const res = await fetch(`${API_URL}/task/${id}`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 };
