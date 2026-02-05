@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ChildTaskList from "./ChildTaskList";
+import CreateTaskModal from "./CreateTaskModal";
+import { TaskSetterContext } from "../page";
 
 
 export interface Task {
@@ -25,6 +27,10 @@ const ParentTaskList = ({
   onTaskUpdate: (task: Task, isParentClick?: boolean) => void;
 }) => {
   const [parentClicked, setParentClicked] = useState<number | null>(null);
+
+  const setTasks = useContext(TaskSetterContext);
+  
+  const [isOpen, setIsOpen] = useState<boolean>(null);
 
   const handleParentCheck = async (task: Task) => {
     const updatedTask = { ...task, completed: !task.completed };
@@ -51,10 +57,13 @@ const ParentTaskList = ({
                 />
                 {task.title}
                 {task && (
-                  <ChildTaskList
-                    childTasks={childTasks(task)}
-                    onTaskUpdate={onTaskUpdate}
-                  />
+                  <div>
+                    <ChildTaskList
+                      childTasks={childTasks(task)}
+                      onTaskUpdate={onTaskUpdate}
+                    />
+                    <CreateTaskModal setTasks={setTasks} belongsToId={task.id}/>
+                  </div>
                 )}
               </li>
             </div>
