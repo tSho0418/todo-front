@@ -27,10 +27,12 @@ const ParentTaskList = ({
   onTaskUpdate: (task: Task, isParentClick?: boolean) => void;
 }) => {
   const [parentClicked, setParentClicked] = useState<number | null>(null);
+  const [isSubTaskModalOpen, setIsSubTaskModalOpen] = useState(false);
+  const [currentParentTaskId, setCurrentParentTaskId] = useState<number | null>(null);
 
   const setTasks = useContext(TaskSetterContext);
   
-  const [isOpen, setIsOpen] = useState<boolean>(null);
+  // const [isOpen, setIsOpen] = useState<boolean>(null); // This state was not used
 
   const handleParentCheck = async (task: Task) => {
     const updatedTask = { ...task, completed: !task.completed };
@@ -40,35 +42,59 @@ const ParentTaskList = ({
   const childTasks = (parentTask: Task) =>
     tasks.filter((t) => t.belongsTo === parentTask.id);
 
+  const openSubTaskModal = (parentId: number) => {
+    setCurrentParentTaskId(parentId);
+    setIsSubTaskModalOpen(true);
+  };
+
+  const closeSubTaskModal = () => {
+    setIsSubTaskModalOpen(false);
+    setCurrentParentTaskId(null);
+  };
+
   return (
-    <div>
-      <ul>
+    <div className="pl-4">
+      <ul className="space-y-4">
         {tasks
           .filter(
             (task) => task.belongsTo === null || task.belongsTo === undefined
           )
           .map((task) => (
-            <div key={task.id}>
-              <li>
+            <li key={task.id} className="bg-gray-50 rounded-lg p-3">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   checked={task.completed}
                   onChange={() => handleParentCheck(task)}
+                  className="h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
                 />
-                {task.title}
-                {task && (
-                  <div>
-                    <ChildTaskList
-                      childTasks={childTasks(task)}
-                      onTaskUpdate={onTaskUpdate}
-                    />
-                    <CreateTaskModal setTasks={setTasks} belongsToId={task.id}/>
-                  </div>
-                )}
-              </li>
-            </div>
+                <span className="ml-3 font-medium text-gray-800">{task.title}</span>
+              </div>
+              {task && (
+                <div className="pl-8 pt-2">
+                  <ChildTaskList
+                    childTasks={childTasks(task)}
+                    onTaskUpdate={onTaskUpdate}
+                  />
+                  <button
+                    onClick={() => openSubTaskModal(task.id)}
+                    className="mt-2 text-sm text-sky-600 hover:text-sky-800 font-medium"
+                  >
+                    + サブタスクを追加
+                  </button>
+                </div>
+              )}
+            </li>
           ))}
       </ul>
+
+      <CreateTaskModal
+        setTasks={setTasks as React.Dispatch<React.SetStateAction<Task[]>>}
+        belongsToId={currentParentTaskId}
+        isOpen={isSubTaskModalOpen}
+        onRequestClose={closeSubTaskModal}
+        tasks={tasks}
+      />
     </div>
   );
 };

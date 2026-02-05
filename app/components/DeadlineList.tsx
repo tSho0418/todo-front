@@ -35,9 +35,9 @@ const DeadlineList = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-8">
     {groupDate && Object.entries(groupDate).map(([monthKey, tasks]) => (
-    <section key={monthKey} style={{ marginBottom: '20px' }}>
+    <section key={monthKey} className="bg-white rounded-lg shadow-md p-4 md:p-6">
       <DeadlineBar tasks={tasks} onTaskUpdate={onTaskUpdate} monthLabel={formatMonthLabel(monthKey)} />
     </section>
   ))}
