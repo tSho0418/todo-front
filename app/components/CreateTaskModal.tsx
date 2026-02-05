@@ -5,7 +5,7 @@ import "igniteui-webcomponents/themes/light/bootstrap.css";
 import { createTask } from "../services/taskService";
 import { CreateTask, Task } from "./ParentTaskList";
 
-const CreateTaskModal = ({setTasks}:{setTasks:React.Dispatch<React.SetStateAction<Task>>}) => {
+const CreateTaskModal = ({setTasks, belongsToId}:{setTasks:React.Dispatch<React.SetStateAction<Task>>, belongsToId: number}) => {
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -20,7 +20,7 @@ const CreateTaskModal = ({setTasks}:{setTasks:React.Dispatch<React.SetStateActio
       description,
       priority,
       deadline: deadline,
-      belongsTo: null,
+      belongsTo: belongsToId,
       completed: false,
     };
     const response = await createTask(newTask);
@@ -66,14 +66,14 @@ const CreateTaskModal = ({setTasks}:{setTasks:React.Dispatch<React.SetStateActio
             value={priority}
             onChange={(e) => setPriority(Number(e.target.value) as 1 | 2 | 3)}
           >
-            <option value={1}>Low</option>
-            <option value={2}>Medium</option>
-            <option value={3}>High</option>
+            <option value={1}>低</option>
+            <option value={2}>中</option>
+            <option value={3}>高</option>
           </select>
           <IgrDatePicker
             ref={datePickerRef}
             displayFormat="shortDate"
-            inputFormat="dd/MM/yy"
+            inputFormat="yy/MM/dd"
           />
           <button type="submit">作成</button>
         </form>
