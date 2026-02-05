@@ -63,11 +63,13 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <TaskSetterContext.Provider value={setTasks}>
-        <DeadlineList tasks={tasks} onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void} />
-        <CreateTaskModal /> 
-      </TaskSetterContext.Provider>
-    </div>
+    <main className="p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <TaskSetterContext.Provider value={setTasks}>
+          <DeadlineList tasks={tasks} onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void} />
+          <CreateTaskModal />
+        </TaskSetterContext.Provider>
+      </div>
+    </main>
   );
 }

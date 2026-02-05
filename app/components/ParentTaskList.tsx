@@ -41,32 +41,33 @@ const ParentTaskList = ({
     tasks.filter((t) => t.belongsTo === parentTask.id);
 
   return (
-    <div>
-      <ul>
+    <div className="pl-4">
+      <ul className="space-y-4">
         {tasks
           .filter(
             (task) => task.belongsTo === null || task.belongsTo === undefined
           )
           .map((task) => (
-            <div key={task.id}>
-              <li>
+            <li key={task.id} className="bg-gray-50 rounded-lg p-3">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   checked={task.completed}
                   onChange={() => handleParentCheck(task)}
+                  className="h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
                 />
-                {task.title}
-                {task && (
-                  <div>
-                    <ChildTaskList
-                      childTasks={childTasks(task)}
-                      onTaskUpdate={onTaskUpdate}
-                    />
-                    <CreateTaskModal setTasks={setTasks} belongsToId={task.id}/>
-                  </div>
-                )}
-              </li>
-            </div>
+                <span className="ml-3 font-medium text-gray-800">{task.title}</span>
+              </div>
+              {task && (
+                <div className="pl-8 pt-2">
+                  <ChildTaskList
+                    childTasks={childTasks(task)}
+                    onTaskUpdate={onTaskUpdate}
+                  />
+                  <CreateTaskModal setTasks={setTasks} belongsToId={task.id}/>
+                </div>
+              )}
+            </li>
           ))}
       </ul>
     </div>
