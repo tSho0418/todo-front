@@ -27,10 +27,12 @@ const ParentTaskList = ({
   onTaskUpdate: (task: Task, isParentClick?: boolean) => void;
 }) => {
   const [parentClicked, setParentClicked] = useState<number | null>(null);
+  const [isSubTaskModalOpen, setIsSubTaskModalOpen] = useState(false);
+  const [currentParentTaskId, setCurrentParentTaskId] = useState<number | null>(null);
 
   const setTasks = useContext(TaskSetterContext);
   
-  const [isOpen, setIsOpen] = useState<boolean>(null);
+  // const [isOpen, setIsOpen] = useState<boolean>(null); // This state was not used
 
   const handleParentCheck = async (task: Task) => {
     const updatedTask = { ...task, completed: !task.completed };
@@ -39,6 +41,16 @@ const ParentTaskList = ({
 
   const childTasks = (parentTask: Task) =>
     tasks.filter((t) => t.belongsTo === parentTask.id);
+
+  const openSubTaskModal = (parentId: number) => {
+    setCurrentParentTaskId(parentId);
+    setIsSubTaskModalOpen(true);
+  };
+
+  const closeSubTaskModal = () => {
+    setIsSubTaskModalOpen(false);
+    setCurrentParentTaskId(null);
+  };
 
   return (
     <div className="pl-4">
@@ -64,12 +76,24 @@ const ParentTaskList = ({
                     childTasks={childTasks(task)}
                     onTaskUpdate={onTaskUpdate}
                   />
-                  <CreateTaskModal setTasks={setTasks} belongsToId={task.id}/>
+                  <button
+                    onClick={() => openSubTaskModal(task.id)}
+                    className="mt-2 text-sm text-sky-600 hover:text-sky-800 font-medium"
+                  >
+                    + サブタスクを追加
+                  </button>
                 </div>
               )}
             </li>
           ))}
       </ul>
+
+      <CreateTaskModal
+        setTasks={setTasks as React.Dispatch<React.SetStateAction<Task[]>>}
+        belongsToId={currentParentTaskId}
+        isOpen={isSubTaskModalOpen}
+        onRequestClose={closeSubTaskModal}
+      />
     </div>
   );
 };

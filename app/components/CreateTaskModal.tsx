@@ -4,8 +4,7 @@ import { IgrDatePicker } from "igniteui-react";
 import { createTask } from "../services/taskService";
 import { CreateTask, Task } from "./ParentTaskList";
 
-const CreateTaskModal = ({setTasks, belongsToId}:{setTasks:React.Dispatch<React.SetStateAction<Task>>, belongsToId: number}) => {
-  const [modal, setModal] = useState(false);
+const CreateTaskModal = ({setTasks, belongsToId, isOpen, onRequestClose}:{setTasks:React.Dispatch<React.SetStateAction<Task[]>>, belongsToId?: number | null, isOpen: boolean, onRequestClose: () => void}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<1 | 2 | 3>(1);
@@ -30,33 +29,22 @@ const CreateTaskModal = ({setTasks, belongsToId}:{setTasks:React.Dispatch<React.
     setTitle("");
     setDescription("");
     setPriority(1);
-    closeModal();
-  };
-
-  const openModal = () => {
-    setModal(true);
-  };
-
-  const closeModal = () => {
-    setModal(false);
+    onRequestClose(); // Use the prop for closing
   };
 
   return (
-    <div className="mt-2">
-      <button onClick={openModal} className="text-sm text-sky-600 hover:text-sky-800 font-medium">
-        + サブタスクを追加
-      </button>
+    // Removed the button and its div here, as the modal is now controlled by props
       <Modal
-        isOpen={modal}
-        onRequestClose={closeModal}
+        isOpen={isOpen} // Controlled by prop
+        onRequestClose={onRequestClose} // Controlled by prop
         ariaHideApp={false}
         className="fixed inset-0 flex items-center justify-center z-50"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+        overlayClassName="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-40"
       >
         <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-gray-800">新しいタスクを作成</h2>
-            <button onClick={closeModal} className="p-2 rounded-full hover:bg-gray-100">
+            <button onClick={onRequestClose} className="p-2 rounded-full hover:bg-gray-100">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -106,7 +94,7 @@ const CreateTaskModal = ({setTasks, belongsToId}:{setTasks:React.Dispatch<React.
           </form>
         </div>
       </Modal>
-    </div>
+    // Removed the wrapping div here as well to simplify controlled component usage
   );
 };
 

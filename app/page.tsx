@@ -13,7 +13,10 @@ export const TaskSetterContext = createContext<React.Dispatch<React.SetStateActi
 
 export default function Home() {
   const [tasks, setTasks] = useState<TaskInterface[]>([]);
+  const [isParentModalOpen, setIsParentModalOpen] = useState(false);
 
+  const openParentModal = () => setIsParentModalOpen(true);
+  const closeParentModal = () => setIsParentModalOpen(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -63,13 +66,33 @@ export default function Home() {
   };
 
   return (
-    <main className="p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <TaskSetterContext.Provider value={setTasks}>
-          <DeadlineList tasks={tasks} onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void} />
-          <CreateTaskModal setTasks={setTasks}/>
-        </TaskSetterContext.Provider>
-      </div>
-    </main>
+    <div className="relative min-h-screen"> {/* Added relative positioning */}
+      <main className="p-4 sm:p-6 md:p-8">
+        <div className="max-w-4xl mx-auto">
+          <TaskSetterContext.Provider value={setTasks}>
+            <DeadlineList tasks={tasks} onTaskUpdate={handleTaskUpdate as (task: TaskInterface) => void} />
+          </TaskSetterContext.Provider>
+        </div>
+      </main>
+
+      {/* Floating Action Button for adding parent tasks */}
+      <button
+        onClick={openParentModal}
+        className="fixed bottom-6 right-6 bg-sky-600 text-white p-4 rounded-full shadow-lg hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-75 z-30"
+        aria-label="Add new parent task"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+
+      {/* CreateTaskModal for parent tasks */}
+      <CreateTaskModal
+        setTasks={setTasks}
+        belongsToId={null}
+        isOpen={isParentModalOpen}
+        onRequestClose={closeParentModal}
+      />
+    </div>
   );
 }
