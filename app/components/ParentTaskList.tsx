@@ -59,8 +59,8 @@ const ParentTaskList = ({
           )
           .map((task) => (
             <li key={task.id} className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
+              <div className="flex items-center  justify-between">
+                <div className="flex items-center w-full">
                   <input
                     type="checkbox"
                     checked={task.completed}
@@ -70,6 +70,9 @@ const ParentTaskList = ({
                   <Link href={`/task/${task.id}`} className="ml-3 font-medium text-gray-800 hover:text-sky-600">
                     {task.title}
                   </Link>
+                  <div className="ml-auto text-gray-500 ml-3 font-medium">
+                    {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Not set'}
+                  </div>
                 </div>
               </div>
               {task && (
