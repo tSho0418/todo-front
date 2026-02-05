@@ -93,6 +93,7 @@ const ParentTaskList = ({
         belongsToId={currentParentTaskId}
         isOpen={isSubTaskModalOpen}
         onRequestClose={closeSubTaskModal}
+        tasks={tasks}
       />
     </div>
   );

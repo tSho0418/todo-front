@@ -92,6 +92,7 @@ export default function Home() {
         belongsToId={null}
         isOpen={isParentModalOpen}
         onRequestClose={closeParentModal}
+        tasks={tasks}
       />
     </div>
   );
