@@ -60,7 +60,7 @@ const TaskDetailPage = ({ params }: { params: { id: string } }) => {
       <div className="flex flex-col justify-center items-center h-screen text-center">
         <p className="text-xl text-red-500 mb-4">{error}</p>
         <Link href="/" className="text-sky-600 hover:underline">
-          &larr; Back to Task List
+          タスク一覧に戻る
         </Link>
       </div>
     );
@@ -77,7 +77,7 @@ const TaskDetailPage = ({ params }: { params: { id: string } }) => {
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
       <Link href="/" className="text-sky-600 hover:underline mb-6 inline-block">
-        &larr; Back to Task List
+        &larr; タスク一覧に戻る
       </Link>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex justify-between items-start">

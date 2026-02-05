@@ -50,55 +50,109 @@ const ParentTaskList = ({
     setCurrentParentTaskId(null);
   };
 
-  return (
-    <div className="pl-4">
-      <ul className="space-y-4">
-        {tasks
-          .filter(
-            (task) => task.belongsTo === null || task.belongsTo === undefined
-          )
-          .map((task) => (
-            <li key={task.id} className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => handleParentCheck(task)}
-                    className="h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
-                  />
-                  <Link href={`/task/${task.id}`} className="ml-3 font-medium text-gray-800 hover:text-sky-600">
-                    {task.title}
-                  </Link>
-                </div>
-              </div>
-              {task && (
-                <div className="pl-8 pt-2">
-                  <ChildTaskList
-                    childTasks={childTasks(task)}
-                    onTaskUpdate={onTaskUpdateProp}
-                  />
-                  <button
-                    onClick={() => openSubTaskModal(task.id)}
-                    className="mt-2 text-sm text-sky-600 hover:text-sky-800 font-medium"
-                  >
-                    + サブタスクを追加
-                  </button>
-                </div>
-              )}
-            </li>
-          ))}
-      </ul>
+    return (
 
-      <CreateTaskModal
-        setTasks={setTasks as React.Dispatch<React.SetStateAction<Task[]>>}
-        belongsToId={currentParentTaskId}
-        isOpen={isSubTaskModalOpen}
-        onRequestClose={closeSubTaskModal}
-        tasks={tasks}
-      />
-    </div>
-  );
+      <div className="pl-4">
+
+        <ul className="space-y-4">
+
+                    {tasks
+
+                      .filter(
+
+                        (task) => task.belongsTo === null || task.belongsTo === undefined
+
+                      )
+
+                      .map((task) => (
+
+              <li key={task.id} className="bg-gray-50 rounded-lg p-3">
+
+                <div className="flex items-center justify-between">
+
+                  <div className="flex items-center w-full">
+
+                    <input
+
+                      type="checkbox"
+
+                      checked={task.completed}
+
+                      onChange={() => handleParentCheck(task)}
+
+                      className="h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+
+                    />
+
+                    <Link href={`/task/${task.id}`} className="ml-3 font-medium text-gray-800 hover:text-sky-600">
+
+                      {task.title}
+
+                    </Link>
+
+                    <div className="ml-auto text-gray-500 ml-3 font-medium">
+
+                      {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Not set'}
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                {task && (
+
+                  <div className="pl-8 pt-2">
+
+                    <ChildTaskList
+
+                      childTasks={childTasks(task)}
+
+                      onTaskUpdate={onTaskUpdateProp}
+
+                    />
+
+                    <button
+
+                      onClick={() => openSubTaskModal(task.id)}
+
+                      className="mt-2 text-sm text-sky-600 hover:text-sky-800 font-medium"
+
+                    >
+
+                      + サブタスクを追加
+
+                    </button>
+
+                  </div>
+
+                )}
+
+              </li>
+
+            ))}
+
+        </ul>
+
+  
+
+        <CreateTaskModal
+
+          setTasks={setTasks as React.Dispatch<React.SetStateAction<Task[]>>}
+
+          belongsToId={currentParentTaskId}
+
+          isOpen={isSubTaskModalOpen}
+
+          onRequestClose={closeSubTaskModal}
+
+          tasks={tasks}
+
+        />
+
+      </div>
+
+    );
 };
 
 export default ParentTaskList;
